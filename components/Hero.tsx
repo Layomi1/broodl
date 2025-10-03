@@ -2,6 +2,9 @@
 
 import { Fugaz_One } from "next/font/google";
 import Button from "./Button";
+import Calendar from "./Calendar";
+
+import { useRouter } from "next/navigation";
 
 const fugaz = Fugaz_One({
   variable: "--font-fugaz-one",
@@ -10,12 +13,19 @@ const fugaz = Fugaz_One({
 });
 
 export default function Hero() {
+  const router = useRouter();
+
+  const handleSignup = () => {
+    router.push("/dashboard");
+  };
+
+  const handleLogin = () => {
+    router.push("/dashboard");
+  };
+
   return (
     <div className="py-4 md:py-10 flex flex-col gap-8 sm:gap-10 text-center">
-      <h1
-        className={`text-5xl sm:text-6xl md:text-7xl
-          ${fugaz.className}`}
-      >
+      <h1 className={`text-5xl sm:text-6xl md:text-7xl ${fugaz.className}`}>
         <span className={"textGradient"}>Broodl </span> helps you track your{" "}
         <span className="textGradient">daily</span> mood!
       </h1>
@@ -24,10 +34,16 @@ export default function Hero() {
         <span className="font-semibold">every day of every year</span>
       </p>
       <div className="grid grid-cols-2 gap-4  mx-auto">
-        <Button text="Sign Up" dark={false} handleClick={() => {}} />
+        <Button
+          text="Sign Up"
+          dark={false}
+          handleClick={handleSignup}
+          full={false}
+        />
 
-        <Button text="Login" dark handleClick={() => {}} />
+        <Button text="Login" dark handleClick={handleLogin} full={false} />
       </div>
+      <Calendar />
     </div>
   );
 }

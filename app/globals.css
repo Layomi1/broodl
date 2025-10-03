@@ -11,6 +11,6 @@
 }
 
 .purpleShadow:hover {
-  transform: translate(3opx, 3px);
+  transform: translate(3px, 3px);
   box-shadow: 0px 0px 1px qpx lavender;
 }

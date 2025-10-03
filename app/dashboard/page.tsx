@@ -6,7 +6,7 @@ import Main from "@/components/Main";
 import Login from "@/components/Login";
 
 export default function DashboardPage() {
-  const [isAutheticated, setIsAutheticated] = useState(false);
+  const [isAutheticated, setIsAutheticated] = useState(true);
 
   let children = <Login />;
 

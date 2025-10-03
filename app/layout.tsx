@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Fugaz_One, Open_Sans } from "next/font/google";
 import "./globals.css";
 import Link from "next/link";
+import QueryProvider from "@/components/QueryProvider";
+import { AuthProvider } from "@/context/auth-context";
 
 const opensans = Open_Sans({
   variable: "--font-open-sans",
@@ -31,6 +33,7 @@ export default function RootLayout({
           Broodl
         </h1>
       </Link>
+      <div className="flex items-center justify-between">PLACEHOLDER</div>
     </header>
   );
   const footer = (
@@ -50,9 +53,13 @@ export default function RootLayout({
         className={`w-full max-w-[1000px] mx-auto text-sm sm:text-base min-h-screen flex flex-col text-slate-800
           ${opensans.className}`}
       >
-        {header}
-        {children}
-        {footer}
+        <QueryProvider>
+          <AuthProvider>
+            {header}
+            {children}
+            {footer}
+          </AuthProvider>
+        </QueryProvider>
       </body>
     </html>
   );
