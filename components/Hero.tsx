@@ -26,7 +26,7 @@ export default function Hero() {
   return (
     <div className="py-4 md:py-10 flex flex-col gap-8 sm:gap-10 text-center">
       <h1 className={`text-5xl sm:text-6xl md:text-7xl ${fugaz.className}`}>
-        <span className={"textGradient"}>Broodl </span> helps you track your{" "}
+        <span className="textGradient">Broodl </span> helps you track your{" "}
         <span className="textGradient">daily</span> mood!
       </h1>
       <p className="text-lg sm:text-xl  md:text-2xl w-full mx-auto max-w-[600px]">
@@ -43,7 +43,7 @@ export default function Hero() {
 
         <Button text="Login" dark handleClick={handleLogin} full={false} />
       </div>
-      <Calendar />
+      <Calendar demo />
     </div>
   );
 }

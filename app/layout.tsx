@@ -8,6 +8,7 @@ import { AuthProvider } from "@/context/auth-context";
 const opensans = Open_Sans({
   variable: "--font-open-sans",
   subsets: ["latin"],
+  weight: ["400"],
 });
 
 const fugaz = Fugaz_One({
