@@ -12,7 +12,7 @@ type ButtonProps = {
   text: string;
   dark: boolean;
   full: boolean;
-  handleClick: (e: FormDataEvent) => void;
+  handleClick: () => void;
 };
 export default function Button(props: ButtonProps) {
   const { text, dark = false, handleClick, full } = props;
