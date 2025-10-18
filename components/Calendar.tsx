@@ -1,15 +1,23 @@
 "use client";
 
-import { baseRating, months, dayLists, gradients } from "@/utils";
+import { baseRating, months, dayLists, gradients, demoData } from "@/utils";
+import { MoodType } from "@/utils/constants";
 import { useState } from "react";
 
+type UserMoodDataProps = {
+  [year: number]: {
+    [month: number]: {
+      [day: number]: MoodType;
+    };
+  };
+};
 type CalendarProps = {
-  demo: Array<string>;
-  // handleSetMood: (mood: string) => void;
-  data: Record<string, number>;
+  completedData: UserMoodDataProps | null;
+  handleSetMood: (mood: MoodType) => void | Promise<void>;
+  demo?: boolean;
 };
 export default function Calendar(props: CalendarProps) {
-  const { demo, data } = props;
+  const { completedData, handleSetMood } = props;
 
   const now = new Date();
   const currentMonth = now.getMonth();
@@ -30,6 +38,8 @@ export default function Calendar(props: CalendarProps) {
   const daysToDisplay = firstDayOfMonth + daysInMonth;
 
   const numberOfRows = Math.ceil(daysToDisplay / 7);
+  const numericMonth=
+  // const data = completedData?.[selectedYear]?.[numericMonth] || {};
 
   const handleIncrementMonth = () => {};
   const handleDecrementMonth = () => {};
@@ -54,7 +64,7 @@ export default function Calendar(props: CalendarProps) {
               return <div className="bg-white" key={idx} />;
             }
 
-            const color = demo
+            const color = demoData
               ? gradients.indigo[baseRating[dayIndex]]
               : dayIndex in data
               ? gradients.indigo[data[dayIndex]]

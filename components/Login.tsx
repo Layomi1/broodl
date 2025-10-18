@@ -44,10 +44,8 @@ export default function Login() {
     setIsAutheticating(true);
     try {
       if (isRegister) {
-        console.log("Signing up new user");
         signup({ email, password });
       } else {
-        console.log("Logging in existing User");
         login({ email, password });
       }
     } catch (error) {

@@ -32,6 +32,8 @@ export default function Dashboard() {
   // const countValues = () => {};
 
   const handleSetMood = async (mood: MoodType) => {
+    if (!currentUser) return;
+
     const now = new Date();
     const day = now.getDate();
     const month = now.getMonth();
@@ -51,6 +53,7 @@ export default function Dashboard() {
       setCompletedData(newData);
       // update global state
       setUserDataObj(newData);
+
       const docRef = doc(db, "users", currentUser.uid);
       await setDoc(
         docRef,
@@ -120,7 +123,6 @@ export default function Dashboard() {
           <button
             onClick={() => {
               handleSetMood(moodkey as MoodType);
-              console.log("clicked");
             }}
             key={moodkey}
             className={`rounded-xl p-4 purpleShadow duration-200 bg-indigo-50 hover:bg-indigo-200 cursor-pointer flex flex-col items-center ${
@@ -138,11 +140,7 @@ export default function Dashboard() {
           </button>
         ))}
       </div>
-      <Calendar
-        completedData={completedData}
-        handleSetMood={handleSetMood}
-        demo
-      />
+      <Calendar completedData={completedData} handleSetMood={handleSetMood} />
     </div>
   );
 }

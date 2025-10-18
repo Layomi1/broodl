@@ -48,7 +48,10 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       try {
         setLoading(true);
         setCurrentUser(user);
-        if (!user) return;
+        if (!user) {
+          console.log("no user found");
+          return;
+        }
         console.log("fetching user data");
         const docRef = doc(db, "users", user.uid);
         const docSnap = await getDoc(docRef);

@@ -1,17 +1,17 @@
 export type BaseRatingType = Record<string, number>;
 
-export type DemoData = {
-  "15": number;
-  "16": number;
-  "17": number;
-  "18": number;
-  "19": number;
-  "20": number;
-  "21": number;
-  "22": number;
-  "23": number;
-  "24": number;
-};
+// export type DemoData = {
+//   "15": number;
+//   "16": number;
+//   "17": number;
+//   "18": number;
+//   "19": number;
+//   "20": number;
+//   "21": number;
+//   "22": number;
+//   "23": number;
+//   "24": number;
+// };
 
 export type GradientsType = {
   indigo: Array<string>;
