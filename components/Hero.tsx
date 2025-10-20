@@ -43,7 +43,7 @@ export default function Hero() {
 
         <Button text="Login" dark handleClick={handleLogin} full={false} />
       </div>
-      <Calendar demo />
+      {/* <Calendar completedData={data} handleSetMood={() => {}} /> */}
     </div>
   );
 }

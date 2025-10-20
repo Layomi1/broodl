@@ -48,20 +48,15 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       try {
         setLoading(true);
         setCurrentUser(user);
-        if (!user) {
-          console.log("no user found");
-          return;
-        }
-        console.log("fetching user data");
+        if (!user) return;
+
         const docRef = doc(db, "users", user.uid);
         const docSnap = await getDoc(docRef);
 
         let firebaseData = {};
 
         if (docSnap.exists()) {
-          console.log("found user data");
           firebaseData = docSnap.data();
-          console.log("firebaseData: ", firebaseData);
         }
         setUserDataObj(firebaseData);
       } catch (error) {

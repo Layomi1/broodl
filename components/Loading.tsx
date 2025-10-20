@@ -2,7 +2,7 @@ function Loading() {
   return (
     <div className="flex flex-col justify-center items-center flex-1">
       <svg
-        className="animate-spin text-lg sm:text-xl"
+        className="animate-spin w-xs"
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 640 640"
       >

@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import { Fugaz_One, Open_Sans } from "next/font/google";
 import "./globals.css";
-import Link from "next/link";
+
 import QueryProvider from "@/components/QueryProvider";
 import { AuthProvider } from "@/context/auth-context";
+import Header from "@/components/Header";
 
 const opensans = Open_Sans({
   variable: "--font-open-sans",
@@ -27,16 +28,6 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const header = (
-    <header className="p-4 sm:p-8 flex items-center justify-between gap-4">
-      <Link href={"/"} className="">
-        <h1 className={`text-base sm:text-lg textGradient ${fugaz.className}`}>
-          Broodl
-        </h1>
-      </Link>
-      <div className="flex items-center justify-between">PLACEHOLDER</div>
-    </header>
-  );
   const footer = (
     <footer className="p-4 sm:p-8 grid place-items-center">
       <p
@@ -56,7 +47,7 @@ export default function RootLayout({
       >
         <QueryProvider>
           <AuthProvider>
-            {header}
+            <Header />
             {children}
             {footer}
           </AuthProvider>

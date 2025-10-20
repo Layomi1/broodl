@@ -13,3 +13,11 @@ export const moods = {
   Good: "😊",
   Elated: "😍",
 } as const;
+
+export type UserMoodData = {
+  [year: number]: {
+    [month: number]: {
+      [day: number]: MoodType;
+    };
+  };
+};

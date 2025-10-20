@@ -9,6 +9,7 @@ import { doc, setDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import Loading from "./Loading";
 import Login from "./Login";
+// import { User } from "firebase/auth";
 
 const fugaz = Fugaz_One({
   variable: "--font-fugaz-one",
@@ -16,20 +17,21 @@ const fugaz = Fugaz_One({
   weight: ["400"],
 });
 
-type UserMoodData = {
+export type UserMoodData = {
   [year: number]: {
     [month: number]: {
       [day: number]: MoodType;
     };
   };
 };
+
 export default function Dashboard() {
   const { currentUser, userDataObj, setUserDataObj, loading, setLoading } =
     useAuth();
 
-  const [completedData, setCompletedData] = useState<UserMoodData | null>({});
+  const [data, setData] = useState<UserMoodData | null>(null);
 
-  // const countValues = () => {};
+  const countValues = () => {};
 
   const handleSetMood = async (mood: MoodType) => {
     if (!currentUser) return;
@@ -50,10 +52,11 @@ export default function Dashboard() {
       }
       newData[year][month][day] = mood;
       // update currentuser state
-      setCompletedData(newData);
+      setData(newData);
       // update global state
       setUserDataObj(newData);
 
+      // update firebase
       const docRef = doc(db, "users", currentUser.uid);
       await setDoc(
         docRef,
@@ -66,8 +69,6 @@ export default function Dashboard() {
         },
         { merge: true }
       );
-
-      // update firebase
     } catch (error) {
       console.log("Failed to set Data", error);
     } finally {
@@ -83,7 +84,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     if (!currentUser || !userDataObj) return;
-    setCompletedData(userDataObj as UserMoodData);
+    setData(userDataObj as UserMoodData);
   }, [currentUser, userDataObj]);
 
   if (loading) {
@@ -140,7 +141,7 @@ export default function Dashboard() {
           </button>
         ))}
       </div>
-      <Calendar completedData={completedData} handleSetMood={handleSetMood} />
+      <Calendar completeData={data} handleSetMood={handleSetMood} />
     </div>
   );
 }
