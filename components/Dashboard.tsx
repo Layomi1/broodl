@@ -1,45 +1,33 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Fugaz_One } from "next/font/google";
+
 import Calendar from "./Calendar";
-import { moods, type MoodType, type StatusType } from "@/utils/constants";
+import {
+  moods,
+  moodScores,
+  UserMoodData,
+  type MoodType,
+  type StatusType,
+} from "@/utils/constants/index.types";
 import { useAuth } from "@/context/auth-context";
 import { doc, setDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import Loading from "./Loading";
 import Login from "./Login";
-// import { User } from "firebase/auth";
+import { fugaz, now } from "@/utils/constants";
 
-const fugaz = Fugaz_One({
-  variable: "--font-fugaz-one",
-  subsets: ["latin"],
-  weight: ["400"],
-});
-
-export type UserMoodData = {
-  [year: number]: {
-    [month: number]: {
-      [day: number]: MoodType;
-    };
-  };
-};
-
+const day = now.getDate();
+const month = now.getMonth();
+const year = now.getFullYear();
 export default function Dashboard() {
   const { currentUser, userDataObj, setUserDataObj, loading, setLoading } =
     useAuth();
 
   const [data, setData] = useState<UserMoodData | null>(null);
 
-  const countValues = () => {};
-
   const handleSetMood = async (mood: MoodType) => {
     if (!currentUser) return;
-
-    const now = new Date();
-    const day = now.getDate();
-    const month = now.getMonth();
-    const year = now.getFullYear();
 
     setLoading(true);
     try {
@@ -76,12 +64,41 @@ export default function Dashboard() {
     }
   };
 
-  const statuses = {
-    num_of_days: 14,
-    time_remaining: "13:08:34",
-    date: new Date().toDateString(),
+  const countValues = (): Pick<StatusType, "num_of_days" | "average_mood"> => {
+    let total_number_of_days = 0;
+    let total_score = 0;
+
+    if (!data) {
+      return { num_of_days: 0, average_mood: "N/A" };
+    }
+
+    for (const year in data) {
+      for (const month in data[year]) {
+        for (const day in data[year][month]) {
+          const day_mood = data[year][month][day];
+          total_number_of_days++;
+          total_score += moodScores[day_mood] ?? 0;
+        }
+      }
+    }
+    if (total_number_of_days === 0) {
+      return { num_of_days: 0, average_mood: "N/A" };
+    }
+
+    const average_score = total_score / total_number_of_days;
+
+    return {
+      num_of_days: total_number_of_days,
+      average_mood: average_score.toFixed(1),
+    };
   };
 
+  const statuses = {
+    ...countValues(),
+
+    time_remaining: `${23 - now.getHours()}H ${60 - now.getMinutes()}m 
+    `,
+  };
   useEffect(() => {
     if (!currentUser || !userDataObj) return;
     setData(userDataObj as UserMoodData);
@@ -96,18 +113,18 @@ export default function Dashboard() {
   return (
     <div className="flex flex-col flex-1 gap-8 sm:gap-10 md:gap-16">
       <div className="grid grid-cols-1 sm:grid-cols-3 text-indigo-500 rounded-lg gap-2 sm:gap-4 px-4 sm:px-6 md:px-8">
-        {Object.keys(statuses).map((status, idx) => (
+        {Object.entries(statuses).map(([key, status]) => (
           <div
-            key={idx}
+            key={key}
             className="p-4 flex flex-col gap-1 sm:gap-2 bg-indigo-50"
           >
-            <p className={`font-semibold uppercase text-xs sm:text-sm `}>
-              {status.replace("_", " ")}
+            <p className={`font-semibold capitalize text-xs sm:text-sm `}>
+              {key.replace("_", " ")}
             </p>
             <p
-              className={`text-base font-medium sm:text-lg ${fugaz.className}`}
+              className={`text-base  font-medium sm:text-lg ${fugaz.className}`}
             >
-              {statuses[status as keyof StatusType]}
+              {status}
             </p>
           </div>
         ))}

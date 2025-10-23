@@ -2,9 +2,10 @@
 
 import { Fugaz_One } from "next/font/google";
 import Button from "./Button";
-import Calendar from "./Calendar";
+// import Calendar from "./Calendar";
 
 import { useRouter } from "next/navigation";
+// import { demoData } from "@/utils/constants";
 
 const fugaz = Fugaz_One({
   variable: "--font-fugaz-one",
@@ -22,6 +23,12 @@ export default function Hero() {
   const handleLogin = () => {
     router.push("/dashboard");
   };
+
+  // function handleSetMood(
+  //   mood: "&*@#$" | "Sad" | "Existing" | "Good" | "Elated"
+  // ): void | Promise<void> {
+  //   throw new Error("Function not implemented.");
+  // }
 
   return (
     <div className="py-4 md:py-10 flex flex-col gap-8 sm:gap-10 text-center">
@@ -43,7 +50,7 @@ export default function Hero() {
 
         <Button text="Login" dark handleClick={handleLogin} full={false} />
       </div>
-      {/* <Calendar completedData={data} handleSetMood={() => {}} /> */}
+      {/* <Calendar completeData={demoData} demo /> */}
     </div>
   );
 }

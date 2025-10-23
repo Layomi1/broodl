@@ -1,19 +1,14 @@
 import type { Metadata } from "next";
-import { Fugaz_One, Open_Sans } from "next/font/google";
+import { Open_Sans } from "next/font/google";
 import "./globals.css";
 
 import QueryProvider from "@/components/QueryProvider";
 import { AuthProvider } from "@/context/auth-context";
 import Header from "@/components/Header";
+import { fugaz } from "@/utils/constants";
 
 const opensans = Open_Sans({
   variable: "--font-open-sans",
-  subsets: ["latin"],
-  weight: ["400"],
-});
-
-const fugaz = Fugaz_One({
-  variable: "--font-fugaz-one",
   subsets: ["latin"],
   weight: ["400"],
 });
