@@ -14,8 +14,9 @@ import { useAuth } from "@/context/auth-context";
 import { doc, setDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import Loading from "./Loading";
-import Login from "./Login";
+
 import { fugaz, now } from "@/utils/constants";
+import Login from "@/app/login/page";
 
 const day = now.getDate();
 const month = now.getMonth();
@@ -82,7 +83,7 @@ export default function Dashboard() {
       }
     }
     if (total_number_of_days === 0) {
-      return { num_of_days: 0, average_mood: "N/A" };
+      return { num_of_days: 0, average_mood: "0" };
     }
 
     const average_score = total_score / total_number_of_days;
@@ -133,7 +134,7 @@ export default function Dashboard() {
         className={`text-4xl sm:text-5xl md:text-7xl text-center ${fugaz.className}`}
       >
         How do you
-        <span className={`textGradient ${fugaz.className}`}> feel </span>
+        <span className={`text-textGradient ${fugaz.className}`}> feel </span>
         today?
       </h4>
       <div className="grid grid-cols-2 sm:grid-cols-5  gap-4 px-4 sm:px-6 md:px-8">

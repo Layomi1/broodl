@@ -19,7 +19,7 @@ export default function Button(props: ButtonProps) {
   return (
     <button
       onClick={handleClick}
-      className={`rounded-full  border-solid w-fit border-indigo-600 overflow-hidden border-2 duration-200 hover:opacity-60  ${
+      className={`rounded-full  border-solid w-fit border-indigo-600 overflow-hidden border-2 cursor-pointer duration-200 hover:opacity-60  ${
         dark ? "text-white bg-indigo-600" : "text-indigo-600"
       } ${full ? "grid items-center w-full" : ""}`}
     >

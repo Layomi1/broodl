@@ -24,7 +24,7 @@ export type AuthContextType = {
   loading?: boolean;
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
   setCurrentUser: React.Dispatch<React.SetStateAction<User | null>>;
-  setUserDataObj: React.Dispatch<React.SetStateAction<object>>;
+  setUserDataObj: React.Dispatch<React.SetStateAction<object | null>>;
 
   logout?: () => Promise<void>;
 };
@@ -37,18 +37,28 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [loading, setLoading] = useState<boolean>(true);
 
   const logout = async () => {
-    await signOut(auth);
-    setCurrentUser(null);
-    setUserDataObj(null);
-    setLoading(false);
+    try {
+      setLoading(true);
+      setUserDataObj(null);
+      setCurrentUser(null);
+      await signOut(auth);
+
+      console.log("clicked");
+    } catch (error) {
+      console.error("Logout error:", error);
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
-    const onsubscribe = onAuthStateChanged(auth, async (user) => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
       try {
         setLoading(true);
         setCurrentUser(user);
-        if (!user) return;
+        if (!user) {
+          setUserDataObj(null);
+          return;
+        }
 
         const docRef = doc(db, "users", user.uid);
         const docSnap = await getDoc(docRef);
@@ -64,7 +74,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       } finally {
         setLoading(false);
       }
-      return onsubscribe;
+      return unsubscribe;
     });
   }, []);
 

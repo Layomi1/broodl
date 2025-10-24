@@ -72,7 +72,7 @@ export const baseRating: BaseRatingType = {
   "43": 3,
 };
 
-export const demoData: BaseRatingType = {
+export const demoData = {
   "15": 2,
   "16": 4,
   "17": 1,

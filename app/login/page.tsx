@@ -1,24 +1,53 @@
 "use client";
 
-import { Fugaz_One } from "next/font/google";
-import Button from "./Button";
+import Button from "@/components/Button";
 import { useState } from "react";
 import Link from "next/link";
 
 import { useLogin, useSignup } from "@/lib/hooks/auth";
-
-const fugaz = Fugaz_One({
-  variable: "--font-fugaz-one",
-  subsets: ["latin"],
-  weight: ["400"],
-});
+import { fugaz } from "@/utils/constants";
 
 export default function Login() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [isRegister, setIsRegister] = useState<boolean>(false);
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
 
   const [isAutheticating, setIsAutheticating] = useState<boolean>(false);
+
+  function validateAndSanitizeInputs(email: string, password: string) {
+    if (!email || !password) {
+      if (!email) setEmailError("Email is required");
+      if (!password) setPasswordError("Password is required");
+      return null;
+    }
+
+    const trimmedEmail = email.trim();
+    const trimmedPassword = password.trim();
+
+    const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+    const passwordRegex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+    const isValidEmail = emailRegex.test(trimmedEmail);
+    const isValidPassword = passwordRegex.test(trimmedPassword);
+
+    if (!isValidEmail) {
+      setEmailError("Invalid email format");
+      return null;
+    }
+    if (!isValidPassword) {
+      setPasswordError(
+        "Password must be at least 8 chars, include upper/lowercase, number, and special char"
+      );
+      return null;
+    }
+    return {
+      email: trimmedEmail.toLowerCase(),
+      password: trimmedPassword,
+    };
+  }
 
   const { mutate: signup } = useSignup({
     onSuccess(userCredential) {
@@ -40,13 +69,16 @@ export default function Login() {
   });
 
   const handleSubmit = async () => {
-    if (!email || !password || password.length < 6) return;
+    const validated = validateAndSanitizeInputs(email, password);
+    if (!validated) return;
+
     setIsAutheticating(true);
     try {
       if (isRegister) {
-        signup({ email, password });
+        signup(validated);
       } else {
-        login({ email, password });
+        login(validated);
+        console.log("logged");
       }
     } catch (error) {
       return { "Unable to register user": error };
@@ -69,9 +101,13 @@ export default function Login() {
         onChange={(e) => setEmail(e.target.value)}
         placeholder="Email"
       />
-      {!isRegister ? (
-        ""
-      ) : (
+      {emailError && (
+        <p className="text-red-500 text-sm -mt-[15px]  max-w-[400px] w-full text-left">
+          {emailError}
+        </p>
+      )}
+
+      <>
         <input
           className="w-full max-w-[400px] mx-auto px-4 py-2 sm:py-3 border border-indigo-400"
           placeholder="Password"
@@ -79,7 +115,12 @@ export default function Login() {
           onChange={(e) => setPassword(e.target.value)}
           type="password"
         />
-      )}
+        {passwordError && (
+          <p className="text-red-500 text-sm -mt-[15px] max-w-[400px] w-full text-left">
+            {passwordError}
+          </p>
+        )}
+      </>
 
       <div className="max-w-[400px] mx-auto w-full">
         <Button

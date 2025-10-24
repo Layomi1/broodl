@@ -8,20 +8,24 @@ import {
   months,
   now,
 } from "@/utils/constants";
-import { MoodType, type UserMoodData } from "@/utils/constants/index.types";
+import {
+  moodScores,
+  MoodType,
+  type UserMoodData,
+} from "@/utils/constants/index.types";
 
 import { useState } from "react";
 import { IoIosArrowDropleftCircle } from "react-icons/io";
 import { IoIosArrowDroprightCircle } from "react-icons/io";
 
 type CalendarProps = {
-  completeData: UserMoodData | null;
+  completeData?: UserMoodData | null;
   handleSetMood?: (mood: MoodType) => void | Promise<void>;
   demo?: boolean;
 };
 
 export default function Calendar(props: CalendarProps) {
-  const { demo, completeData, handleSetMood } = props;
+  const { demo, completeData } = props;
 
   const currentMonth = now.getMonth();
   const monthArray = Object.keys(months);
@@ -44,7 +48,9 @@ export default function Calendar(props: CalendarProps) {
   const data: Record<number, number> = Object.entries(
     completeData?.[selectedYear]?.[numericMonth] || {}
   ).reduce((acc, [key, value]) => {
-    acc[Number(key)] = value as unknown as number;
+    const moodType = value as MoodType;
+    acc[Number(key)] = moodScores[moodType];
+    // acc[Number(key)] = value as unknown as number;
     return acc;
   }, {} as Record<number, number>);
 
@@ -94,7 +100,11 @@ export default function Calendar(props: CalendarProps) {
                 rowIndex * 7 + weekDayIdx - (firstDayOfMonth - 1);
 
               const dayDisplay =
-                dayIndex > daysInMonth || dayIndex <= 0 ? false : true;
+                dayIndex > daysInMonth
+                  ? false
+                  : row === 0 && rowIndex < firstDayOfMonth
+                  ? false
+                  : true;
 
               if (!dayDisplay) {
                 return <div className="bg-white" key={weekDayIdx} />;

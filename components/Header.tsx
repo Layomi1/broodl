@@ -1,13 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { Fugaz_One } from "next/font/google";
 
-const fugaz = Fugaz_One({
-  variable: "--font-fugaz-one",
-  subsets: ["latin"],
-  weight: ["400"],
-});
+import { fugaz } from "@/utils/constants";
+import Logout from "./Logout";
 
 export default function Header() {
   return (
@@ -17,7 +13,7 @@ export default function Header() {
           Broodl
         </h1>
       </Link>
-      <div className="flex items-center justify-between">PLACEHOLDER</div>
+      <Logout />
     </header>
   );
 }
